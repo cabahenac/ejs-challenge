@@ -12,24 +12,38 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+const posts = [];
+
 app.get("/", (req, res) => {
-  res.render("home", {homeStartingContent: homeStartingContent})
+  res.render("home", {
+    homeStartingContent: homeStartingContent,
+    posts: posts,
+  });
 });
 
 app.get("/about", (req, res) => {
-  res.render("about", {aboutContent: aboutContent})
+  res.render("about", {aboutContent: aboutContent});
 });
 
 app.get("/contact", (req, res) => {
-  res.render("contact", {contactContent: contactContent})
+  res.render("contact", {contactContent: contactContent});
 });
 
+app.get("/compose", (req, res) => {
+  res.render("compose");
+});
 
-
-
+app.post("/compose", (req, res) => {
+  const post = {
+    title: req.body.postTitle,
+    content: req.body.postBody,
+  };
+  posts.push(post)
+  res.redirect("/");
+});
 
 app.listen(3000, function() {
   console.log("Server started on port 3000");
